@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAPPY BIRTHDAY</title>
+    <link rel="icon" href="image/cake.png" type="image"> 
+    <link rel="stylesheet" href="static/style.css">
+    <style>
+
+    .modal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        z-index: 1100;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-content {
+        background-color: white;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        width: 80%;
+        max-width: 280px;
+    }
+
+    .modal-content p {
+        font-size: 12px; /* Ukuran font lebih besar untuk kejelasan */
+        color: #333; /* Warna teks lebih kontras */
+        font-family: sans-serif; /* Font sans-serif untuk keterbacaan yang lebih baik */
+        margin-bottom: 15px;
+    }
+
+    .modal-content button {
+        margin: 8px;
+        padding: 5px 10px;
+        font-size: 12px;
+        cursor: pointer;
+        background-color: #FF7777;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .modal-content button:hover {
+        background-color: #ff5555;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background-color: #E78F81;
+        perspective: 1000px;
+        margin: 0;
+        padding: 20px;
+        overflow: hidden;
+    }
+
+    /* Intro Animation Styling */
+    .intro-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #E78F81;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        z-index: 1000;
+        transition: transform 1s ease;
+    }
+
+    
+    .intro-text {
+        font-family: 'Brush Script MT', cursive;
+        font-size: 25px;
+        color: white;
+        text-align: center;
+        animation: pulse 4s infinite;
+        padding: 0 20px;
+    }
+
+    .intro-button {
+        padding: 5px 10px;
+        font-size: clamp(1rem, 4vw, 1.2rem);
+        background: white;
+        border: none;
+        border-radius: 25px;
+        color: #FF7777;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .intro-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    .hidden {
+        transform: translateY(-100%);
+    }
+
+    .content-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        width: 100%;
+        max-width: 100vw;
+    }
+
+    .show-content {
+        display: flex;
+    }
+
+    .birthdayCard {
+        position: relative;
+        width: min(250px, 90vw);
+        height: min(350px, 80vh);
+        cursor: pointer;
+        transform-style: preserve-3d;
+        transition: transform 1s ease;
+    }
+
+    .cardFront {
+        position: relative;
+        background-color: #F9F9E0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        transform-origin: left;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        transition: transform 0.6s, box-shadow 0.6s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .music-controls {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        padding: 12px 20px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 10px;
+        z-index: 100;
+    }
+
+    .music-controls button {
+        background: #FF7777;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+        font-family: Tahoma, sans-serif;
+        font-size: clamp(0.8rem, 3vw, 1rem);
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+    /* Mobile-specific adjustments */
+    @media (max-width: 768px) {
+        .cardInside p {
+            margin: 10px;
+            font-size: 11px;
+        }
+
+        .happy {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+        }
+
+        .back {
+            margin: 15px;
+            font-size: clamp(1.1rem, 4vw, 1.3rem);
+        }
+
+        .balloons {
+            scale: 0.8;
+        }
+
+        .music-controls {
+            padding: 8px 15px;
+        }
+
+        .music-controls button {
+            padding: 6px 12px;
+        }
+    }
+
+    .cake {
+        width: 60px;
+        height: 30px;
+        background-color: #f9c9b2;
+        border-radius: 10px;
+        position: relative;
+        margin-top: 20px;
+    }
+
+    .cake::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: 10px;
+        width: 40px;
+        height: 10px;
+        background-color: #f1a7a1;
+        border-radius: 5px;
+    }
+
+    .candles {
+        position: absolute;
+        top: -15px;
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .candle {
+        width: 5px;
+        height: 15px;
+        background-color: #f9c9b2;
+        position: relative;
+    }
+
+    .candle::after {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 5px;
+        height: 5px;
+        background-color: #ffcc00;
+        border-radius: 50%;
+    }
+
+    .happy {
+        font-family: Tahoma, sans-serif;
+        color: #333;
+        text-align: center;
+        margin: 20px 0;
+        font-size: 1.5rem; /* Membuat font lebih besar */
+        font-weight: bold; /* Membuat teks lebih tebal */
+        background-image: linear-gradient(120deg, #FF7777, #db9494);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: opacity 0.3s ease;
+    }
+
+    .balloons {
+        position: absolute;
+        top: 150px;
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+    }
+
+    .balloonOne, .balloonTwo, .balloonThree, .balloonFour {
+        width: 85px;
+        height: 95px;
+        border-radius: 50%;
+    }
+
+    .balloonOne { background-color: rgba(240, 98, 131, 0.85); }
+    .balloonTwo { background-color: rgba(93, 202, 173, 0.85); }
+    .balloonThree { background-color: rgba(249, 214, 132, 0.85); }
+    .balloonFour { background-color: rgba(80, 182, 216, 0.85); }
+
+    .balloonOne::before,
+    .balloonTwo::before,
+    .balloonThree::before,
+    .balloonFour::before {
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 155px;
+        background-color: #ffd166;
+        top: 95px;
+        left: 43px;
+    }
+
+    .cardInside {
+        position: absolute; 
+        background-color: #F9F9E0;
+        width: 250px;
+        height: 350px;
+        left: 0;
+        top: 0;
+        z-index: -1; 
+        box-shadow: inset 100px 20px 100px rgba(0, 0, 0, 0.2);
+    }
+    
+    p {
+        font-family: "Sans-Serif", cursive;
+        margin: 40px;
+        color: #333;
+    }
+    
+
+    .back {
+        font-family: Tahoma, sans-serif;
+        color: #333;
+        text-align: center;
+        margin: 30px;
+        font-size: 1.5rem; /* Membuat font lebih besar */
+        font-weight: bold; /* Membuat teks lebih tebal */
+        color: #FF7777; /* Mengganti warna teks */
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Efek bayangan halus */
+        background: linear-gradient(120deg, #FF7777, #FFC3A0); /* Gradien pada teks */
+        -webkit-background-clip: text; /* Memotong latar ke teks */
+        -webkit-text-fill-color: transparent; /* Membuat gradien terlihat */
+        transition: transform 0.3s ease; /* Animasi saat mouse hover */
+    }
+    
+    .back:hover {
+        transform: scale(1.05); /* Sedikit memperbesar teks saat hover */
+    }
+    
+
+    .birthdayCard:hover {
+        transform: rotateY(10deg) rotateX(5deg);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .birthdayCard:hover .cardFront {
+        transform: rotateY(-160deg);
+    }
+
+    .birthdayCard:hover .happy {
+        opacity: 0;
+    }
+
+    /* Music Controls Styling */
+    .music-controls {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        padding: 15px 25px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 15px;
+        z-index: 100;
+    }
+
+    .music-controls button {
+        background: #FF7777;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+        font-family: Tahoma, sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .music-controls button:hover {
+        background: #ff5555;
+        transform: scale(1.05);
+    }
+
+    .music-controls button:active {
+        transform: scale(0.95);
+    }
+
+    .intro-image {
+        width: 60%; /* Full width on mobile */
+        height: auto; /* Maintain aspect ratio */
+        max-width: 400px; /* Limit maximum width on larger screens (adjust as needed) */
+        margin: 0 auto 20px; /* Center the image and add bottom margin */
+        display: block; /* Ensure it behaves like a block element */
+    } 
+
+    </style>
+</head>
+<body>
+    <!-- Modal untuk tanya musik -->
+    <div id="musicModal" class="modal">
+        <div class="modal-content">
+            <p>haloo haii mba hanii, mau nyalain musiknya gak?</p>
+            <button onclick="chooseMusic(true)">mau mau</button>
+            <button onclick="chooseMusic(false)">nonono</button>
+        </div>
+    </div>
+
+    <audio id="birthdayMusic" loop>
+        <source src="musik/happy.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Intro Screen -->
+    <div class="intro-screen" id="introScreen">
+        <img src="image/foto.jpg" alt="Intro Image" class="intro-image">
+        <div class="intro-text">
+            <span id="dynamicText"></span>
+        </div>
+        <button class="intro-button" onclick="startExperience()"> open me 𖹭´･ᴗ･`𖹭 </button>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="content-container" id="mainContent">
+        <div class="birthdayCard">
+            <div class="cardFront">
+                <h6 class="happy">Dear Mba Hanii ────୨ৎ────</h6>
+                <div class="cake">
+                    <div class="candles">
+                        <div class="candle"></div>
+                        <div class="candle"></div>
+                        <div class="candle"></div>
+                    </div>
+                </div>
+                <div class="balloons">
+                    <div class="balloonOne"></div>
+                    <div class="balloonTwo"></div>
+                    <div class="balloonThree"></div>
+                    <div class="balloonFour"></div>
+                </div>
+            </div>
+            <div class="cardInside">
+                <p>Barakallahu fii umrik mba hani❤︎</p>
+                <p>selamat ulang tahun mba aku yang terhebat, terkeren, tersayang, tersemuanya pokoknya mba hani ter the bestt. bismillah di hari ini tepat mba hani berumur yg ke 25 tahun aaaa, semoga mba hani selalu diberkahi dengan kebahagiaan, kesehatan, rezeki, dan hajat yang terwujud. semoga mba hani dilancarkan dan dimudahkan selalu untuk kerjanya, kuliahnya, dan berumah tangganya yg sepertinya bisa dibilang tdk lama lagi ya hehehe, apapun yang jadi hajat mba hani pokoknya doa terbaik supaya dimudahkan jalannya. lovee banyak bgtt dan terimakasih buat mba hanii, beruntungnya aku, lulu, dan rafi punya mba seperti hani𖹭 dan tentunya ayah dan ibu yg lebih bangga punya mba hani𖹭 lovvvvv mbaaa hanii cantikk⋆ ˚｡⋆୨♡୧⋆ ˚｡⋆</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('birthdayMusic');
+
+        // Fungsi untuk mengelola pengalaman setelah memilih di pop-up
+        function startExperience() {
+            document.getElementById('introScreen').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('mainContent').classList.add('show-content');
+            }, 1000);
+        }
+
+        // Fungsi play dan stop musik
+        function playMusic() {
+            audio.play();
+        }
+
+        function stopMusic() {
+            audio.pause();
+            audio.currentTime = 0;
+        }
+
+        // Efek teks berjalan
+        const text = "Happy Birthday Mba Hanii";
+        const textContainer = document.getElementById('dynamicText');
+        let index = 0;
+
+        function typeText() {
+            if (index < text.length) {
+                textContainer.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeText, 100);
+            }
+        }
+
+        // Fungsi untuk menangani pilihan pop-up
+        function chooseMusic(play) {
+            document.getElementById('musicModal').style.display = 'none';
+            document.getElementById('introScreen').style.display = 'flex'; // Menampilkan intro screen setelah memilih
+            if (play) {
+                audio.play();
+            }
+            typeText();
+        }
+
+        // Menunggu pop-up sebelum melanjutkan
+        window.onload = () => {
+            document.getElementById('musicModal').style.display = 'flex';
+        };
+    </script>
+</body>
+</html>
